@@ -1,0 +1,31 @@
+body{
+    background-color: rgb(154, 89, 245);
+    /* background: linear-gradient(rgb(89, 120, 245), rgb(89, 216, 245)); */
+}
+
+.place{
+    width: 30%;
+    margin-left: 35%;
+}
+
+.button{
+    margin-top:10%;
+    background-color: rgb(0, 123, 255);
+    border-radius: 50%;
+    width: 400px;
+    height: 400px;
+    color: white;
+    font-size: 100px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 400px;
+    box-shadow: 0px 0px 18px 18px rgb(255, 0, 0);
+}
+
+.button:active{
+    box-shadow: inset 0 0 3px 3px rgba(0, 0, 0, 0.2);
+}
+
+.on{
+    box-shadow: 0px 0px 18px 18px rgb(255, 225, 0);
+}
