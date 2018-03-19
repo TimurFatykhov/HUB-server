@@ -1,7 +1,12 @@
 //import implement, { Interface, type } from 'implement-js'
 var express = require('express');
 var app = express();
+var bodyParser = require('body-parser');
+var urlencodedParser = bodyParser.urlencoded({extended: false});
 
+
+var fs = require('fs');
+app.use('/', express.static('public'));
 
 
 
