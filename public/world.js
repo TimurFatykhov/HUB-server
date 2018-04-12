@@ -1,24 +1,18 @@
-class World
-{
-  constructor()
-  {
+class World {
+  constructor() {
     this.devices = [];
   }
-  addDevice()
-  {
+  addDevice() {
 
   }
-  removeDevice()
-  {
+  removeDevice() {
 
   }
 
 };
 
-class Device
-{
-  constructor(name, id)
-  {
+class Device {
+  constructor(name, id) {
     this.name = name;
     this.id = id
   }
@@ -26,25 +20,26 @@ class Device
   {
 
   }
-  givMeHistory()
-  {
+  givMeHistory() {
 
   }
 
 }
 
-class Light extend Device
-{
+class Light extend Device {
 
-  request()
-    {
+  request() {
 
-    }
+  }
 
 
 }
 
+var world = World()
 
-module.exports = function doIt(data) {
-  
+module.exports = function doIt(jsonRequest) {
+  idDevice = jsonRequest["IDDevice"]
+  indexAction = jsonRequest["IndexAction"]
+  params = jsonRequest["Params"]
+
 }
