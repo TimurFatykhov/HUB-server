@@ -24,7 +24,7 @@ class World {
     var json = []
     for (var i in this.devices) {
       var dev = {}
-      dev.ID = this.devices[i].ID
+      dev.ID = this.devices[i].id
       dev.Name = this.devices[i].name
       json.push(dev)
     }
@@ -113,11 +113,11 @@ module.exports = doIt
 console.log(doIt({
   IDDevice: 0,
   IndexAction: 0,
-  Params: [1, 2, 3]
+  Params: []
 }))
 
 console.log(doIt({
   IDDevice: 1,
   IndexAction: 0,
-  Params: [1, 2, 3]
+  Params: []
 }))
