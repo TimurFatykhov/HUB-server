@@ -68,6 +68,10 @@ class SystemClock extends Device { // Системные часы
     switch (idAction) { // В зависимости от того, что пришло, выполняем нужную
       case 0: //           функцию
         result = this.getTime();
+        result = {
+          IDDevice: this.id,
+          Params: [result]
+        }
         break;
     }
     return result
