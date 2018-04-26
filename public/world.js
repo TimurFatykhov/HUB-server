@@ -26,6 +26,7 @@ class World {
       var dev = {}
       dev.ID = this.devices[i].id
       dev.Name = this.devices[i].name
+      dev.Type = this.devices[i].type
       json.push(dev)
     }
     return JSON.stringify(json)
@@ -34,9 +35,10 @@ class World {
 };
 
 class Device {
-  constructor(name = "name", id = "id") {
+  constructor(name = "name", id = "id", typeStr = "SystemClock") {
     this.name = name;
     this.id = id
+    this.type = typeStr
   }
 
   request() { // Запрос на выполнение действий / на информацию
@@ -81,8 +83,8 @@ class SystemClock extends Device { // Системные часы
 }
 
 var world = new World()
-world.addDevice(new SystemClock("clock1Name", 1))
-world.addDevice(new SystemClock("clock2Name", 2))
+world.addDevice(new SystemClock("clock1Name", 1, "SystemClock"))
+world.addDevice(new SystemClock("clock2Name", 2, "SystemClock"))
 
 function doIt(jsonRequest) {
   idDevice = jsonRequest["IDDevice"];
@@ -109,6 +111,8 @@ function processServerComand(indexAction, params) { // Обработчик ко
 }
 
 module.exports = doIt
+
+
 
 console.log(doIt({
   IDDevice: 0,
