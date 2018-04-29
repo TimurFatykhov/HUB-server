@@ -1,3 +1,30 @@
+var net = require('net');
+var sleep = require('system-sleep');
+
+
+function hardRequest(ip, port, msg) // отправляет запрпрос на устройство и возвращает ответ
+{
+  var client = new net.Socket();
+  var buf = ""
+
+  client.connect(port, ip);
+  client.on('data', function(data) {
+    buf = data;
+  });
+
+  client.write(msg);
+  var i = 0
+  while (buf == "") {
+    sleep(10)
+    i++;
+    if (i >= 1000) // Ждем 10 секунд
+      break
+  }
+  client.destroy()
+	return buf.toString()
+}
+
+
 class World {
   constructor() {
     this.devices = [];
@@ -56,6 +83,9 @@ class Light extends Device {
 
   request() {
     console.log("req Light")
+
+
+
   }
 
 
@@ -85,6 +115,9 @@ class SystemClock extends Device { // Системные часы
     return time
   }
 }
+
+
+
 
 var world = new World()
 world.addDevice(new SystemClock("clock1Name", 1, "SystemClock"))
@@ -117,7 +150,6 @@ function processServerComand(indexAction, params) { // Обработчик ко
 module.exports = doIt
 
 
-
 console.log(doIt({
   IDDevice: 0,
   IndexAction: 0,
@@ -129,3 +161,6 @@ console.log(doIt({
   IndexAction: 0,
   Params: []
 }))
+
+
+console.log(hardRequest('192.168.43.124',21,"Test msg"))
