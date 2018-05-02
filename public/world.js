@@ -95,6 +95,10 @@ function doIt(jsonRequest) {
   indexAction = jsonRequest["IndexAction"];
   params = jsonRequest["Params"];
 
+console.log('hello' + idDevice)
+console.log(indexAction)
+console.log(params)
+
   if (idDevice == 0) // 0 - команды к самому серверу
     return processServerComand(indexAction, params)
 

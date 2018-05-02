@@ -1,7 +1,14 @@
 {
-    "devDependencies": {
-      "express": "4.16.2",
-      "pug": "2.0.0-rc.4",
-      "nodemon": "1.15.1"
-    }
+  "devDependencies": {
+    "express": "4.16.2",
+    "pug": "2.0.0-rc.4",
+    "nodemon": "1.15.1"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "express-session": "^1.15.6",
+    "lokijs": "^1.5.3",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0"
+  }
 }

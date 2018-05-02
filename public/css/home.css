@@ -1,0 +1,105 @@
+.btn{
+    width: 130px;
+    height: 30px;
+    color: white;
+    text-align: center;
+    background-color: #ae54ee;
+    margin: auto;
+    margin-top: 15em;
+}
+.bedroom{
+    background-color: #0d29ff;
+}
+.kitchen{
+    background-color: #1f7e22;
+}
+.isOn{
+    -webkit-box-shadow: 0px 0px 15px 5px rgb(251, 255, 0);  /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
+    /* -moz-box-shadow:    1px 3px 5px 8px rgb(251, 255, 0);  Firefox 3.5 - 3.6 */
+}
+
+body {
+    font-size: 1em;
+    background: rgb(71, 64, 133);
+    font-family: 'Roboto', Arial, Verdana, sans-serif;
+}
+
+h1{
+    color: white;
+    text-align: center;
+}
+
+.side-menu {
+    width:14em;
+    height: auto;
+    margin:4em auto 0;
+    font-size: 1em;
+    line-height: 2em;
+    color: #fff;
+    font-weight:700;
+    text-transform:uppercase;
+    position:absolute;
+    top:0; 
+    bottom:0;
+    left: -10em;
+}
+.side-menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.side-menu ul li {
+  display:block;
+    background-color: #333;
+    height: 2em;
+    padding: 1em 1.5em;
+    position: relative;
+    -webkit-transition: -webkit-transform 0.5s,     background-color .5s, color .5s;
+    transition: transform .5s, background-color .5s, color .5s;
+}
+
+/*the colors of the different columns*/
+.side-menu ul li:nth-child(1) { background-color: #d51b81;}
+.side-menu ul li:nth-child(2) { background-color: #ba1e2e;}
+.side-menu ul li:nth-child(3) { background-color: #00a300;}
+.side-menu ul li:nth-child(4) { background-color: #1e7145;}
+.side-menu ul li:nth-child(5) { background-color: #ffc40d;}
+.side-menu ul li:nth-child(6) { background-color: #cb2027;}
+
+.side-menu ul li:hover {
+    /* background-color: #339966;  */
+    /*you can make different colors depending on the nth-child like above*/
+
+
+    /* -webkit-transform: translateX(10em); */
+
+
+    /* transform: translateX(10em); */
+    /*equal to left in the .side-menu*/
+}
+
+.afterClick{
+    background-color: #339966; /*you can make different colors depending on the nth-child like above*/
+    -webkit-transform: translateX(10em);
+    transform: translateX(10em);/*equal to left in the .side-menu*/
+}
+
+
+.side-menu ul li{
+  display:block;
+    color: #FFF;
+    text-decoration: none;
+}
+.side-menu ul li span {
+    display:block;
+    position: absolute;
+    font-size:1em;
+    line-height: 2em;
+    height:2em;
+    top:0; 
+    bottom:0;
+    margin:0 auto;
+    padding:1em 1.5em;
+    right: 0.16666666666667em;
+    color: #F8F6FF;
+}
