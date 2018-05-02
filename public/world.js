@@ -1,3 +1,50 @@
+var net = require('net');
+var sleeper = require('deasync');
+
+
+
+function hardRequest(ip, port, msg) // отправляет запрпрос на устройство и возвращает ответ
+{
+  var client = new net.Socket();
+  var buf = "ERR"
+  var isConnected = false;
+
+  client.connect(port, ip, function() {
+    isConnected = true
+  });
+  client.on('data', function(data) {
+    buf = data;
+  });
+
+  var i = 0
+  while (isConnected == false) {
+    //console.log(i);
+    sleeper.sleep(10)
+    i++;
+    if (i >= 200) // Ждем 2 секунды
+    {
+      client.destroy()
+      return "ERR"
+    }
+  }
+
+  client.write(msg);
+
+  var i = 0
+  while (buf == "ERR") {
+    //console.log(i);
+    sleeper.sleep(10)
+    i++;
+
+    if (i >= 200) // Ждем 2 секунды
+      break
+  }
+  client.destroy()
+
+  return buf.toString()
+}
+
+
 class World {
   constructor() {
     this.devices = [];
@@ -35,10 +82,12 @@ class World {
 };
 
 class Device {
-  constructor(name = "name", id = "id", typeStr = "SystemClock") {
+  constructor(name = "name", id = "id", typeStr = "SystemClock", ip, port) {
     this.name = name;
     this.id = id
     this.type = typeStr
+    this.ip = ip
+    this.port = port
   }
 
   request() { // Запрос на выполнение действий / на информацию
@@ -54,10 +103,50 @@ class Device {
 
 class Light extends Device {
 
-  request() {
-    console.log("req Light")
-  }
+  request(idAction, params) {
+    var result = {}
+    switch (idAction) { // В зависимости от того, что пришло, выполняем нужную
+      case 0: //           функцию
+        result = this.get_state();
 
+        result = {
+          IDDevice: this.id,
+          Params: [result]
+        }
+        break;
+      case 1:
+        result = this.set_state(params[0]);
+        result = {
+          IDDevice: this.id,
+          Params: [result]
+        }
+    }
+    return result
+  }
+  get_state() {
+    var state = hardRequest(this.ip, this.port, "[0]")
+    if (state == "[1]")
+      return "on"
+    if (state == "[0]")
+      return "off"
+
+    return "ERR"
+  }
+  set_state(state) {
+    if (state == "on")
+      state = 1
+    else if (state = "off")
+      state = 0
+    else return "ERR"
+
+    var newState = hardRequest(this.ip, this.port, "[1," + state + "]")
+    if (newState == '[' + state + ']')
+      return "OK"
+    else
+      return "ERR"
+
+
+  }
 
 }
 
@@ -86,9 +175,13 @@ class SystemClock extends Device { // Системные часы
   }
 }
 
+
+
+
 var world = new World()
-world.addDevice(new SystemClock("clock1Name", 1, "SystemClock"))
-world.addDevice(new SystemClock("clock2Name", 2, "SystemClock"))
+world.addDevice(new SystemClock("clock1Name", 1, "SystemClock", "127.0.0.1", 3000))
+world.addDevice(new SystemClock("clock2Name", 2, "SystemClock", "127.0.0.1", 3000))
+world.addDevice(new Light("light1Name", 3, "Light", "192.168.43.124", 21))
 
 function doIt(jsonRequest) {
   idDevice = jsonRequest["IDDevice"];
@@ -102,24 +195,31 @@ console.log(params)
   if (idDevice == 0) // 0 - команды к самому серверу
     return processServerComand(indexAction, params)
 
+
   var device = world.getDeviceFromId(idDevice) // Находим устройство в списке
   if (device == "ERR") // Если такого устройства нет
-    return "ERR" // Возвращаем ошибку
+    return {
+      IDDevice: device,
+      Params: ["ERR"]
+    } // Возвращаем ошибку
   return device.request(indexAction, params) // Обращаемся к устройству и
   //                                                       возваращаем ответ
 }
 
 function processServerComand(indexAction, params) { // Обработчик команд к серверу
+
   switch (indexAction) {
     case 0:
-      return world.getAllDevicesJson()
+      return {
+        idDevice: 0,
+        Params: world.getAllDevicesJson()
+      }
       break;
   }
   return "ERR"
 }
 
 module.exports = doIt
-
 
 
 console.log(doIt({
@@ -133,3 +233,11 @@ console.log(doIt({
   IndexAction: 0,
   Params: []
 }))
+
+console.log(doIt({
+  IDDevice: 3,
+  IndexAction: 1,
+  Params: ['on']
+}))
+
+//console.log(hardRequest('192.168.43.124', 21, "Test msg"))
