@@ -4,10 +4,12 @@
 const char* ssid = "Redmi";
 const char* password = "12345678";
 
-int led = 2;
+int led = 2;  // d4
+int led2 = 4; // d2
 int ledOn = LOW;
 int ledOff = HIGH;
 int ledState = ledOff;
+int ledState2 = ledOff;
 
 WiFiServer server(21);
 
@@ -16,7 +18,10 @@ int bufInt[128];
 
 void setup() {
   pinMode(led, OUTPUT);
+  pinMode(led2, OUTPUT);
   digitalWrite(led, ledState);
+  digitalWrite(led2, ledState);
+  
   Serial.begin(115200);
   WiFi.begin(ssid, password);
   Serial.print("\nConnecting to "); Serial.println(ssid);
@@ -106,20 +111,16 @@ int parse_str_in_int_array(char * arrIn, int maxLenIn, int * arrOut, int maxLenO
   return iOutArray; // Возвращаем количество считанных чисел
 }
 
-int process_msg(char * inputMsg, int inputMsgMaxLen, char * outputMsg, int outputMsgMaxLen)
+
+int c0(char *outputMsg)
 {
-  // return 0 если все хорошо
-  int nElems = parse_str_in_int_array(inputMsg, inputMsgMaxLen, bufInt, 128);
-  if(nElems <= 0)
-    return -1;
-  int idAction = bufInt[0];
-  switch(idAction)
-  {
-    case 0:
-      sprintf(outputMsg,"[%d]",ledState == ledOn ? 1 : 0);
-      break;
-    case 1:
-      if(nElems != 2)
+  sprintf(outputMsg,"[%d]",ledState == ledOn ? 1 : 0);
+  return 0;
+        
+}
+int c1(int nElems, int * bufInt, char * outputMsg)
+{
+  if(nElems != 2)
         return -1;
       int newState = bufInt[1];
       if(newState == 1)
@@ -132,8 +133,51 @@ int process_msg(char * inputMsg, int inputMsgMaxLen, char * outputMsg, int outpu
       digitalWrite(led, ledState);
       outputMsg[0] = '\0';
   
-      sprintf(outputMsg,"[%d]",ledState == ledOn ? 1 : 0);
+      sprintf(outputMsg,"[%d]",ledState == ledOn ? 1 : 0);  
+      return 0;
+}
+
+int process_msg(char * inputMsg, int inputMsgMaxLen, char * outputMsg, int outputMsgMaxLen)
+{
+  // return 0 если все хорошо
+  int nElems = parse_str_in_int_array(inputMsg, inputMsgMaxLen, bufInt, 128);
+  if(nElems <= 0)
+    return -1;
+  int idAction = bufInt[0];
+  switch(idAction)
+  {
+    case 0:
+      //sprintf(outputMsg,"[%d]",ledState == ledOn ? 1 : 0);
+      return c0(outputMsg);
       break;
+    case 1:
+      return c1(nElems, bufInt, outputMsg);
+      break;
+      
+    case 2:
+      sprintf(outputMsg,"[%d]",ledState2 == ledOn ? 1 : 0);
+      break;
+      
+    case 3:
+      if(nElems != 2)
+        return -1;
+      int newState = bufInt[1];
+      if(newState == 1)
+      { 
+        ledState2 = ledOn;
+      }  else if(newState == 0)
+      {
+        ledState2 = ledOff;
+      } else return -1;
+      digitalWrite(led2, ledState2);
+      outputMsg[0] = '\0';
+  
+      sprintf(outputMsg,"[%d]",ledState2 == ledOn ? 1 : 0);
+      break;
+
+
+
+      
   }
   return 0;
 }
