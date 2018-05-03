@@ -53,6 +53,6 @@ $(document).ready(function(){
     }
 
         data = {param: JSON.stringify(data)}
-        $.post('/switch', data, function(res){alert(res)}, 'text')
+        $.post('/switch', data, function(res){console.log(res)}, 'text')
     });
 });
