@@ -124,26 +124,55 @@ class Light extends Device {
     return result
   }
   get_state() {
-    var state = hardRequest(this.ip, this.port, "[0]")
-    if (state == "[1]")
-      return "on"
-    if (state == "[0]")
-      return "off"
+    if (this.id == 3) {
+      var state = hardRequest(this.ip, this.port, "[0]")
+      if (state == "[1]")
+        return "on"
+      if (state == "[0]")
+        return "off"
 
-    return "ERR"
+      return "ERR"
+    }
+    if (this.id == 4) {
+      var state = hardRequest(this.ip, this.port, "[2]")
+      if (state == "[1]")
+        return "on"
+      if (state == "[0]")
+        return "off"
+
+      return "ERR"
+    }
   }
   set_state(state) {
-    if (state == "on")
-      state = 1
-    else if (state = "off")
-      state = 0
-    else return "ERR"
+    if (this.id == 3) {
+      if (state == "on")
+        state = 1
+      else if (state = "off")
+        state = 0
+      else return "ERR"
 
-    var newState = hardRequest(this.ip, this.port, "[1," + state + "]")
-    if (newState == '[' + state + ']')
-      return "OK"
-    else
-      return "ERR"
+      var newState = hardRequest(this.ip, this.port, "[1," + state + "]")
+      if (newState == '[' + state + ']')
+        return "OK"
+      else
+        return "ERR"
+    }
+
+    if (this.id == 4) {
+      if (state == "on")
+        state = 1
+      else if (state = "off")
+        state = 0
+      else return "ERR"
+
+      var newState = hardRequest(this.ip, this.port, "[3," + state + "]")
+      if (newState == '[' + state + ']')
+        return "OK"
+      else
+        return "ERR"
+    }
+
+
 
 
   }
@@ -182,6 +211,7 @@ var world = new World()
 world.addDevice(new SystemClock("clock1Name", 1, "SystemClock", "127.0.0.1", 3000))
 world.addDevice(new SystemClock("clock2Name", 2, "SystemClock", "127.0.0.1", 3000))
 world.addDevice(new Light("light1Name", 3, "Light", "192.168.43.124", 21))
+world.addDevice(new Light("light1Name", 4, "Light", "192.168.43.124", 21))
 
 function doIt(jsonRequest) {
   idDevice = jsonRequest["IDDevice"];
@@ -231,9 +261,9 @@ console.log(doIt({
 }))
 
 console.log(doIt({
-  IDDevice: 3,
+  IDDevice: 4,
   IndexAction: 1,
-  Params: ['on']
+  Params: ['off']
 }))
 
 //console.log(hardRequest('192.168.43.124', 21, "Test msg"))
