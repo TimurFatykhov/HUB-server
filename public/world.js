@@ -76,7 +76,7 @@ class World {
       dev.Type = this.devices[i].type
       json.push(dev)
     }
-    return JSON.stringify(json)
+    return json;
   }
 
 };
